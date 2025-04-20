@@ -26,7 +26,7 @@ model {
         for (s in 1:S) {
             A[s][g] ~ multi_normal(a_hat[g], 0.5 * identity_matrix(K)); // Prior for CTS expression
 
-            X[g, s] ~ normal(W[s] * A[s][g]', sigma[g]); // Bulk expression model
+            X[g, s] ~ normal(W[s] * A[s][g] + c1[s] * beta[g] + W[s] * B[g] * c2[s], sigma[g] + S[g]); // Bulk expression model
         }
     }
 }

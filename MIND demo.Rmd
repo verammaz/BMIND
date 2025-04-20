@@ -1,0 +1,35 @@
+---
+title: "MIND demo"
+output: html_document
+date: "2025-03-30"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Installation
+
+```{r}
+devtools::install_github('randel/MIND')
+```
+
+## Tutorial
+
+
+```{r}
+library(MIND)
+data(example)
+bulk = t(na.omit(apply(example$X, 1, as.vector)))
+frac = na.omit(apply(example$W, 3, as.vector))
+colnames(bulk) = rownames(frac) = 1:nrow(frac)
+y = rbinom(n = nrow(frac), size = 1, prob = 0.5)
+covariate = data.frame(c1 = rnorm(length(y)), c2 = rnorm(length(y)))
+
+# CTS-DE (np = TRUE: use non-informative prior)
+deconv = bmind_de(bulk, frac, y = y, covariate = covariate, covariate_bulk = 'c1', covariate_cts = 'c2', np = T)
+ 
+# estimate CTS expression
+deconv2 = bMIND(bulk, frac)
+```
+
